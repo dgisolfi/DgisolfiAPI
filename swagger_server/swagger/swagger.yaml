@@ -1,0 +1,126 @@
+---
+swagger: "2.0"
+info:
+  description: "A Swagger REST API used to update content on the dgisolfi website"
+  version: "1.0.0"
+  title: "DgisolfiAPI"
+  contact:
+    email: "Daniel.Gisolfi1@marist.edu"
+host: "www.dgisolfi.xyz"
+basePath: "/api/v1/"
+schemes:
+- "http"
+paths:
+  /static:
+    get:
+      tags:
+      - "Static"
+      summary: "Get a static file by name"
+      description: "Given a static file name in the path, the corresponding file will\
+        \ be returned"
+      operationId: "get_static"
+      produces:
+      - "multipart/form-data"
+      parameters:
+      - name: "filename"
+        in: "path"
+        description: "Static Filename"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "File not found"
+      x-swagger-router-controller: "swagger_server.controllers.static_controller"
+    post:
+      tags:
+      - "Static"
+      summary: "Upload a static file."
+      description: "A static file that will be referenced by the dgisolfi site EX:\
+        \ a picture"
+      operationId: "add_static"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "file"
+        in: "formData"
+        description: "Static File"
+        required: true
+        type: "file"
+      responses:
+        201:
+          description: "File Added"
+        400:
+          description: "File unable to be added"
+      x-swagger-router-controller: "swagger_server.controllers.static_controller"
+  /pages:
+    get:
+      tags:
+      - "Pages"
+      summary: "Get a html file by page name"
+      description: "Given a page name in the path, the corresponding html file will\
+        \ be returned"
+      operationId: "get_page"
+      produces:
+      - "multipart/form-data"
+      parameters:
+      - name: "filename"
+        in: "path"
+        description: "HTML Filename"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "File not found"
+      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
+    post:
+      tags:
+      - "Pages"
+      summary: "Upload a HTML Page."
+      description: "A HTML file that will be referenced by the dgisolfi website"
+      operationId: "add_page"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "file"
+        in: "formData"
+        description: "HTML File"
+        required: true
+        type: "file"
+      responses:
+        201:
+          description: "File Added"
+        400:
+          description: "File unable to be added"
+      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
+    put:
+      tags:
+      - "Pages"
+      summary: "Update a HTML Page."
+      description: "Update an existing HTML file"
+      operationId: "update_page"
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "file"
+        in: "formData"
+        description: "HTML File"
+        required: true
+        type: "file"
+      responses:
+        201:
+          description: "File Added"
+        400:
+          description: "File unable to be added"
+      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
+definitions: {}
