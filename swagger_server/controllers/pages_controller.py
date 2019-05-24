@@ -1,7 +1,12 @@
 import connexion
 import six
+import os
 
+from flask import jsonify
+from flask import send_file
 from swagger_server import util
+
+static_directory = '/usr/src/app/pages'
 
 
 def add_page(file, filename):  # noqa: E501
@@ -16,7 +21,14 @@ def add_page(file, filename):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        if not os.path.exists(static_directory):
+            os.makedirs(static_directory)
+        file.save(f'{static_directory}/{filename}')
+        file.close()
+        return jsonify({'status': 'File Added'}), 201
+    except:
+        return jsonify({'status': 'File unable to be added'}), 400
 
 
 def delete_page(filename):  # noqa: E501
@@ -29,7 +41,11 @@ def delete_page(filename):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        os.remove(f'{static_directory}/{filename}')
+        return jsonify({'status': 'OK'}), 200
+    except:
+        return jsonify({'status': 'File not found'}), 404
 
 
 def get_page(filename):  # noqa: E501
@@ -42,7 +58,10 @@ def get_page(filename):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        return send_file(f'{static_directory}/{filename}'), 200
+    except:
+        return jsonify({'status': 'File not found'}), 404
 
 
 def update_page(file, filename):  # noqa: E501
@@ -57,4 +76,10 @@ def update_page(file, filename):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        os.remove(f'{static_directory}/{filename}')
+        file.save(f'{static_directory}/{filename}')
+        file.close()
+        return jsonify({'status': 'File Updated'}), 201
+    except:
+        return jsonify({'status': 'File unable to be updated'}), 400
