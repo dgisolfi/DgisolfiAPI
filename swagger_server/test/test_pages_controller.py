@@ -16,12 +16,27 @@ class TestPagesController(BaseTestCase):
 
         Upload a HTML Page.
         """
+        query_string = [('filename', 'filename_example')]
         data = dict(file=(BytesIO(b'some file data'), 'file.txt'))
         response = self.client.open(
             '/api/v1//pages',
             method='POST',
             data=data,
-            content_type='multipart/form-data')
+            content_type='multipart/form-data',
+            query_string=query_string)
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+    def test_delete_page(self):
+        """Test case for delete_page
+
+        Delete a HTML file by name
+        """
+        query_string = [('filename', 'filename_example')]
+        response = self.client.open(
+            '/api/v1//pages',
+            method='DELETE',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -30,9 +45,12 @@ class TestPagesController(BaseTestCase):
 
         Get a html file by page name
         """
+        query_string = [('filename', 'filename_example')]
         response = self.client.open(
-            '/api/v1//pages'.format(filename='filename_example'),
-            method='GET')
+            '/api/v1//pages',
+            method='GET',
+            content_type='application/json',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -41,12 +59,14 @@ class TestPagesController(BaseTestCase):
 
         Update a HTML Page.
         """
+        query_string = [('filename', 'filename_example')]
         data = dict(file=(BytesIO(b'some file data'), 'file.txt'))
         response = self.client.open(
             '/api/v1//pages',
             method='PUT',
             data=data,
-            content_type='application/json')
+            content_type='multipart/form-data',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 

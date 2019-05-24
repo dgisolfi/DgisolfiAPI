@@ -10,6 +10,8 @@ host: "www.dgisolfi.xyz"
 basePath: "/api/v1/"
 schemes:
 - "http"
+security:
+- APIKeyHeader: []
 paths:
   /static:
     get:
@@ -23,15 +25,22 @@ paths:
       - "multipart/form-data"
       parameters:
       - name: "filename"
-        in: "path"
+        in: "query"
         description: "Static Filename"
         required: true
         type: "string"
       responses:
         200:
           description: "OK"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
         404:
           description: "File not found"
+      security:
+      - APIKeyQueryParam: []
       x-swagger-router-controller: "swagger_server.controllers.static_controller"
     post:
       tags:
@@ -50,11 +59,85 @@ paths:
         description: "Static File"
         required: true
         type: "file"
+      - name: "filename"
+        in: "query"
+        description: "Static Filename"
+        required: true
+        type: "string"
       responses:
         201:
           description: "File Added"
         400:
           description: "File unable to be added"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
+      security:
+      - APIKeyQueryParam: []
+      x-swagger-router-controller: "swagger_server.controllers.static_controller"
+    put:
+      tags:
+      - "Static"
+      summary: "Update a Static File."
+      description: "Update an existing static file"
+      operationId: "update_static"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "file"
+        in: "formData"
+        description: "HTML File"
+        required: true
+        type: "file"
+      - name: "filename"
+        in: "query"
+        description: "HTML Filename"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "File Updated"
+        400:
+          description: "File unable to be updated"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
+      security:
+      - APIKeyQueryParam: []
+      x-swagger-router-controller: "swagger_server.controllers.static_controller"
+    delete:
+      tags:
+      - "Static"
+      summary: "Delete a static file by name"
+      description: "Given a static file name in the path, the corresponding file will\
+        \ be deleted"
+      operationId: "delete_static"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filename"
+        in: "query"
+        description: "Static Filename"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
+        404:
+          description: "File not found"
+      security:
+      - APIKeyQueryParam: []
       x-swagger-router-controller: "swagger_server.controllers.static_controller"
   /pages:
     get:
@@ -64,19 +147,28 @@ paths:
       description: "Given a page name in the path, the corresponding html file will\
         \ be returned"
       operationId: "get_page"
+      consumes:
+      - "application/json"
       produces:
       - "multipart/form-data"
       parameters:
       - name: "filename"
-        in: "path"
+        in: "query"
         description: "HTML Filename"
         required: true
         type: "string"
       responses:
         200:
           description: "OK"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
         404:
           description: "File not found"
+      security:
+      - APIKeyQueryParam: []
       x-swagger-router-controller: "swagger_server.controllers.pages_controller"
     post:
       tags:
@@ -94,11 +186,23 @@ paths:
         description: "HTML File"
         required: true
         type: "file"
+      - name: "filename"
+        in: "query"
+        description: "HTML Filename"
+        required: true
+        type: "string"
       responses:
         201:
           description: "File Added"
         400:
           description: "File unable to be added"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
+      security:
+      - APIKeyQueryParam: []
       x-swagger-router-controller: "swagger_server.controllers.pages_controller"
     put:
       tags:
@@ -107,7 +211,6 @@ paths:
       description: "Update an existing HTML file"
       operationId: "update_page"
       consumes:
-      - "application/json"
       - "multipart/form-data"
       produces:
       - "application/json"
@@ -117,10 +220,65 @@ paths:
         description: "HTML File"
         required: true
         type: "file"
+      - name: "filename"
+        in: "query"
+        description: "HTML Filename"
+        required: true
+        type: "string"
       responses:
-        201:
-          description: "File Added"
+        200:
+          description: "File Updated"
         400:
-          description: "File unable to be added"
+          description: "File unable to be updated"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
+      security:
+      - APIKeyQueryParam: []
       x-swagger-router-controller: "swagger_server.controllers.pages_controller"
+    delete:
+      tags:
+      - "Pages"
+      summary: "Delete a HTML file by name"
+      description: "Given a HTML file name in the path, the corresponding file will\
+        \ be deleted"
+      operationId: "delete_page"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filename"
+        in: "query"
+        description: "HTML Filename"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            Authenticate:
+              type: "string"
+        404:
+          description: "File not found"
+      security:
+      - APIKeyQueryParam: []
+      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
+securityDefinitions:
+  APIKeyHeader:
+    type: "apiKey"
+    name: "API-Key"
+    in: "header"
+  APIKeyQueryParam:
+    type: "apiKey"
+    name: "api_key"
+    in: "query"
 definitions: {}
+responses:
+  UnauthorizedError:
+    description: "API key is missing or invalid"
+    headers:
+      Authenticate:
+        type: "string"
