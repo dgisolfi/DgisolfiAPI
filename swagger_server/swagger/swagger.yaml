@@ -11,7 +11,7 @@ basePath: "/api/v1/"
 schemes:
 - "http"
 security:
-- APIKeyHeader: []
+- basicAuth: []
 paths:
   /static:
     get:
@@ -32,15 +32,8 @@ paths:
       responses:
         200:
           description: "OK"
-        401:
-          description: "API key is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
         404:
           description: "File not found"
-      security:
-      - APIKeyQueryParam: []
       x-swagger-router-controller: "swagger_server.controllers.static_controller"
     post:
       tags:
@@ -70,12 +63,12 @@ paths:
         400:
           description: "File unable to be added"
         401:
-          description: "API key is missing or invalid"
+          description: "user/pass authorization is missing or invalid"
           headers:
             Authenticate:
               type: "string"
       security:
-      - APIKeyQueryParam: []
+      - basicAuth: []
       x-swagger-router-controller: "swagger_server.controllers.static_controller"
     put:
       tags:
@@ -104,12 +97,12 @@ paths:
         400:
           description: "File unable to be updated"
         401:
-          description: "API key is missing or invalid"
+          description: "user/pass authorization is missing or invalid"
           headers:
             Authenticate:
               type: "string"
       security:
-      - APIKeyQueryParam: []
+      - basicAuth: []
       x-swagger-router-controller: "swagger_server.controllers.static_controller"
     delete:
       tags:
@@ -130,14 +123,14 @@ paths:
         200:
           description: "OK"
         401:
-          description: "API key is missing or invalid"
+          description: "user/pass authorization is missing or invalid"
           headers:
             Authenticate:
               type: "string"
         404:
           description: "File not found"
       security:
-      - APIKeyQueryParam: []
+      - basicAuth: []
       x-swagger-router-controller: "swagger_server.controllers.static_controller"
   /pages:
     get:
@@ -161,14 +154,14 @@ paths:
         200:
           description: "OK"
         401:
-          description: "API key is missing or invalid"
+          description: "user/pass authorization is missing or invalid"
           headers:
             Authenticate:
               type: "string"
         404:
           description: "File not found"
       security:
-      - APIKeyQueryParam: []
+      - basicAuth: []
       x-swagger-router-controller: "swagger_server.controllers.pages_controller"
     post:
       tags:
@@ -197,12 +190,12 @@ paths:
         400:
           description: "File unable to be added"
         401:
-          description: "API key is missing or invalid"
+          description: "user/pass authorization is missing or invalid"
           headers:
             Authenticate:
               type: "string"
       security:
-      - APIKeyQueryParam: []
+      - basicAuth: []
       x-swagger-router-controller: "swagger_server.controllers.pages_controller"
     put:
       tags:
@@ -231,12 +224,12 @@ paths:
         400:
           description: "File unable to be updated"
         401:
-          description: "API key is missing or invalid"
+          description: "user/pass authorization is missing or invalid"
           headers:
             Authenticate:
               type: "string"
       security:
-      - APIKeyQueryParam: []
+      - basicAuth: []
       x-swagger-router-controller: "swagger_server.controllers.pages_controller"
     delete:
       tags:
@@ -257,28 +250,22 @@ paths:
         200:
           description: "OK"
         401:
-          description: "API key is missing or invalid"
+          description: "user/pass authorization is missing or invalid"
           headers:
             Authenticate:
               type: "string"
         404:
           description: "File not found"
       security:
-      - APIKeyQueryParam: []
+      - basicAuth: []
       x-swagger-router-controller: "swagger_server.controllers.pages_controller"
 securityDefinitions:
-  APIKeyHeader:
-    type: "apiKey"
-    name: "API-Key"
-    in: "header"
-  APIKeyQueryParam:
-    type: "apiKey"
-    name: "api_key"
-    in: "query"
+  basicAuth:
+    type: "basic"
 definitions: {}
 responses:
   UnauthorizedError:
-    description: "API key is missing or invalid"
+    description: "user/pass authorization is missing or invalid"
     headers:
       Authenticate:
         type: "string"

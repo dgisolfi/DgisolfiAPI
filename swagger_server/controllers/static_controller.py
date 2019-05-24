@@ -2,6 +2,7 @@ import connexion
 import six
 import os
 
+from .auth import authenticate
 from flask import jsonify
 from flask import send_file
 from swagger_server import util
@@ -21,9 +22,17 @@ def add_static(file, filename):  # noqa: E501
 
     :rtype: None
     """
+    if not authenticate(connexion.request):
+        return jsonify({'status': 'user/pass authorization is missing or invalid'}), 401
+    
     try:
         if not os.path.exists(static_directory):
             os.makedirs(static_directory)
+
+        local_file = Path(f'{static_directory}/{filename}')
+        if local_file.exists():
+            raise ValueError('file already exists')
+            
         file.save(f'{static_directory}/{filename}')
         file.close()
         return jsonify({'status': 'File Added'}), 201
@@ -41,6 +50,8 @@ def delete_static(filename):  # noqa: E501
 
     :rtype: None
     """
+    if not authenticate(connexion.request):
+        return jsonify({'status': 'user/pass authorization is missing or invalid'}), 401
     try:
         os.remove(f'{static_directory}/{filename}')
         return jsonify({'status': 'OK'}), 200
@@ -76,6 +87,9 @@ def update_static(file, filename):  # noqa: E501
 
     :rtype: None
     """
+    if not authenticate(connexion.request):
+        return jsonify({'status': 'user/pass authorization is missing or invalid'}), 401
+        
     try:
         os.remove(f'{static_directory}/{filename}')
         file.save(f'{static_directory}/{filename}')
