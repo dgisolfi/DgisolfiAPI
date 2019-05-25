@@ -11,10 +11,5 @@ COPY . /usr/src/app
 
 EXPOSE 8080
 
-
-WORKDIR /usr/src/app/swagger_server
 ENTRYPOINT ["python3"]
-CMD [ "run.py" ]
-
-
-# CMD ["-m", "swagger_server"]
+CMD ["-m", "swagger_server"]

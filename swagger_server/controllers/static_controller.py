@@ -2,6 +2,7 @@ import connexion
 import six
 import os
 
+from pathlib import Path
 from .auth import authenticate
 from flask import jsonify
 from flask import send_file

@@ -6,7 +6,7 @@ info:
   title: "DgisolfiAPI"
   contact:
     email: "Daniel.Gisolfi1@marist.edu"
-host: "www.dgisolfi.xyz"
+host: "dgisolfi.xyz"
 basePath: "/api/v1/"
 schemes:
 - "http"

@@ -1,8 +1,13 @@
-version: '3'
+# Daniel Nicolas Gisolfi
+# 2019-5-23
+
+version: '2'
 services:
   dgisolfi-api:
     build: .
-    ports: 
-      - "8080:8080"
+    # image: dgisolfi/dgisolfi-api
+    ports:
+      - "8081:8080"
+    container_name: dgisolfi-api
     volumes:
       - /Users/daniel/git/DgisolfiAPI:/usr/src/app
