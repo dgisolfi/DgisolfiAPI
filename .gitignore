@@ -65,4 +65,7 @@ target/
 
 /static
 /pages
-upload.py
+
+.env
+.vscode
+data

@@ -5,9 +5,22 @@ version: '2'
 services:
   dgisolfi-api:
     build: .
-    # image: dgisolfi/dgisolfi-api
     ports:
       - "8081:8080"
     container_name: dgisolfi-api
+    env_file: .env
+    # volumes:
+    #   - /Users/daniel/git/DgisolfiAPI:/usr/src/app
+  database:
+    image: couchdb
+    restart: unless-stopped
+    container_name: dgisolfi-database
+    env_file: .env
+    environment:
+      COUCHDB_USER: $COUCHDB_USER
+      COUCHDB_PASSWORD: $COUCHDB_PASSWORD
+    ports:
+      - "5984:5984"
     volumes:
-      - /Users/daniel/git/DgisolfiAPI:/usr/src/app
+      -  ${PWD}/db/data:/opt/couchdb/data
+  

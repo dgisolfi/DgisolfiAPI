@@ -1,271 +1,50 @@
----
-swagger: "2.0"
+openapi: 3.0.0
 info:
-  description: "A Swagger REST API used to update content on the dgisolfi website"
-  version: "1.0.0"
-  title: "DgisolfiAPI"
+  title: DgisolfiAPI
+  description: A Swagger REST API used to update content on the dgisolfi website
   contact:
-    email: "Daniel.Gisolfi1@marist.edu"
-host: "dgisolfi.xyz"
-basePath: "/api/v1/"
-schemes:
-- "http"
-security:
-- basicAuth: []
+    email: Daniel.Gisolfi1@marist.edu
+  version: 2.0.0
+servers:
+- url: "http://dgisolfi.xyz:{port}/{basePath}"
+  description: production server
+  variables:
+    port:
+      default: "8080"
+    basePath:
+      default: /api/
 paths:
-  /static:
+  /pages/{page}:
     get:
-      tags:
-      - "Static"
-      summary: "Get a static file by name"
-      description: "Given a static file name in the path, the corresponding file will\
-        \ be returned"
-      operationId: "get_static"
-      produces:
-      - "multipart/form-data"
+      summary: Returns the content of a page
+      operationId: pages_get
       parameters:
-      - name: "filename"
-        in: "query"
-        description: "Static Filename"
+      - name: page
+        in: path
         required: true
-        type: "string"
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        200:
-          description: "OK"
-        404:
-          description: "File not found"
-      x-swagger-router-controller: "swagger_server.controllers.static_controller"
-    post:
-      tags:
-      - "Static"
-      summary: "Upload a static file."
-      description: "A static file that will be referenced by the dgisolfi site EX:\
-        \ a picture"
-      operationId: "add_static"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "file"
-        in: "formData"
-        description: "Static File"
-        required: true
-        type: "file"
-      - name: "filename"
-        in: "query"
-        description: "Static Filename"
-        required: true
-        type: "string"
-      responses:
-        201:
-          description: "File Added"
-        400:
-          description: "File unable to be added"
-        401:
-          description: "user/pass authorization is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: "swagger_server.controllers.static_controller"
-    put:
-      tags:
-      - "Static"
-      summary: "Update a Static File."
-      description: "Update an existing static file"
-      operationId: "update_static"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "file"
-        in: "formData"
-        description: "HTML File"
-        required: true
-        type: "file"
-      - name: "filename"
-        in: "query"
-        description: "HTML Filename"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "File Updated"
-        400:
-          description: "File unable to be updated"
-        401:
-          description: "user/pass authorization is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: "swagger_server.controllers.static_controller"
-    delete:
-      tags:
-      - "Static"
-      summary: "Delete a static file by name"
-      description: "Given a static file name in the path, the corresponding file will\
-        \ be deleted"
-      operationId: "delete_static"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "filename"
-        in: "query"
-        description: "Static Filename"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-        401:
-          description: "user/pass authorization is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
-        404:
-          description: "File not found"
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: "swagger_server.controllers.static_controller"
-  /pages:
-    get:
-      tags:
-      - "Pages"
-      summary: "Get a html file by page name"
-      description: "Given a page name in the path, the corresponding html file will\
-        \ be returned"
-      operationId: "get_page"
-      consumes:
-      - "application/json"
-      produces:
-      - "multipart/form-data"
-      parameters:
-      - name: "filename"
-        in: "query"
-        description: "HTML Filename"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-        401:
-          description: "user/pass authorization is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
-        404:
-          description: "File not found"
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
-    post:
-      tags:
-      - "Pages"
-      summary: "Upload a HTML Page."
-      description: "A HTML file that will be referenced by the dgisolfi website"
-      operationId: "add_page"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "file"
-        in: "formData"
-        description: "HTML File"
-        required: true
-        type: "file"
-      - name: "filename"
-        in: "query"
-        description: "HTML Filename"
-        required: true
-        type: "string"
-      responses:
-        201:
-          description: "File Added"
-        400:
-          description: "File unable to be added"
-        401:
-          description: "user/pass authorization is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
-    put:
-      tags:
-      - "Pages"
-      summary: "Update a HTML Page."
-      description: "Update an existing HTML file"
-      operationId: "update_page"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "file"
-        in: "formData"
-        description: "HTML File"
-        required: true
-        type: "file"
-      - name: "filename"
-        in: "query"
-        description: "HTML Filename"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "File Updated"
-        400:
-          description: "File unable to be updated"
-        401:
-          description: "user/pass authorization is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
-    delete:
-      tags:
-      - "Pages"
-      summary: "Delete a HTML file by name"
-      description: "Given a HTML file name in the path, the corresponding file will\
-        \ be deleted"
-      operationId: "delete_page"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "filename"
-        in: "query"
-        description: "HTML Filename"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-        401:
-          description: "user/pass authorization is missing or invalid"
-          headers:
-            Authenticate:
-              type: "string"
-        404:
-          description: "File not found"
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: "swagger_server.controllers.pages_controller"
-securityDefinitions:
-  basicAuth:
-    type: "basic"
-definitions: {}
-responses:
-  UnauthorizedError:
-    description: "user/pass authorization is missing or invalid"
-    headers:
-      Authenticate:
-        type: "string"
+        "200":
+          description: the content of the page in JSON
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                x-content-type: application/json
+        "404":
+          description: the page was not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+components: {}
+
