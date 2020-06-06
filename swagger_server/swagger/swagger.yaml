@@ -6,6 +6,13 @@ info:
     email: Daniel.Gisolfi1@marist.edu
   version: 2.0.0
 servers:
+- url: "https://dgisolfi.xyz:{port}/{basePath}"
+  description: production server
+  variables:
+    port:
+      default: "8080"
+    basePath:
+      default: /api/
 - url: "http://dgisolfi.xyz:{port}/{basePath}"
   description: production server
   variables:
