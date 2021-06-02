@@ -27,7 +27,7 @@ if __name__ == "__main__":
             "idna==2.9",
             "pycouchdb==1.14",
             "requests==2.23.0",
-            "urllib3==1.25.9",
+            "urllib3==1.26.5",
         ],
         include_package_data=True,
         zip_safe=False,
