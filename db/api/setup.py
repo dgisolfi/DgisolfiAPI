@@ -22,7 +22,7 @@ if __name__ == "__main__":
         version=couch.__version__,
         packages=find_packages(exclude=["tests"]),
         install_requires=[
-            "certifi==2020.4.5.1",
+            "certifi==2022.12.7",
             "chardet==3.0.4",
             "idna==2.9",
             "pycouchdb==1.14",
